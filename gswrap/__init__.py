@@ -825,7 +825,11 @@ class Client:
             """Generate sources and destinations."""
             for blob in blob_iterator:
                 blob_prefix = blob.name
-                file_name = blob_prefix.replace(src_gcs_prefix_parent, '', 1)
+                # Hot fix to prevent bug where '.' parent gets the dot removed from filename + extension!
+                if src_gcs_prefix_parent == '.':
+                    file_name = blob_prefix
+                else:
+                    file_name = blob_prefix.replace(src_gcs_prefix_parent, '', 1)
                 if file_name.startswith('/'):
                     file_name = file_name[1:]
 
